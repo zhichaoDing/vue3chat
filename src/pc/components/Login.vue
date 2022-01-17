@@ -77,7 +77,7 @@ export default defineComponent({
             .then((response) => response.data)
             .then((data) => {
               console.log(data);
-              window.localStorage.setItem('username',data.username)
+              window.localStorage.setItem("username", data.username);
               router.push("/info");
             });
         })

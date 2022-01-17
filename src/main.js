@@ -1,22 +1,11 @@
 import { createApp } from "vue";
 import "ant-design-vue/dist/antd.css";
-import { createRouter, createWebHashHistory } from "vue-router";
 
 import App from "./App.vue";
-import Info from "./Info.vue";
-import Home from "./Home.vue";
 
-const routes = [
-  { path: "/", component: Home },
-  { path: "/info", component: Info },
-];
+//路由
+import route from "./route/route";
 
-const router = createRouter({
-  // 4. 内部提供了 history 模式的实现。为了简单起见，我们在这里使用 hash 模式。
-  history: createWebHashHistory(),
-  routes, // `routes: routes` 的缩写
-});
-
-const app = createApp(App)
-app.use(router)
+const app = createApp(App);
+app.use(route);
 app.mount("#app");

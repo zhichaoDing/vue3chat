@@ -31,7 +31,7 @@ import {
 } from "vue";
 import { message } from "ant-design-vue";
 import { useRouter, useRoute } from "vue-router";
-import socket from "./socket";
+import socket from "../../socket";
 export default defineComponent({
   setup() {
     const myRef = ref(null);
