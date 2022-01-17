@@ -24,7 +24,7 @@
 </template>
 <script>
 import { defineComponent, reactive, toRaw } from "vue";
-import { Form } from "ant-design-vue";
+import { Form, message } from "ant-design-vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
 
@@ -71,14 +71,19 @@ export default defineComponent({
       validate()
         .then(() => {
           let data = toRaw(modelRef);
-          console.log(data);
+          axios.defaults.withCredentials = true; //设置添加cookie
           axios
             .post("http://127.0.0.1:3333/login", data)
             .then((response) => response.data)
             .then((data) => {
-              console.log(data);
-              window.localStorage.setItem("username", data.username);
-              router.push("/info");
+              const { code, msg, username } = data;
+              if (code === 0) {
+                window.localStorage.setItem("username", data.username);
+                router.push("/info");
+                message.success(msg)
+              } else {
+                 message.error(msg)
+              }
             });
         })
         .catch((err) => {

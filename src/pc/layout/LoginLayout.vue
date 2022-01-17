@@ -2,7 +2,7 @@
   <a-layout>
     <a-layout-content class="layout" >
       <a-row>
-        <a-col :span="6" :offset="10">
+        <a-col :span="6" :offset="9">
           <a-card class="login-card">
             <img alt="Vue logo" src="../../assets/logo.png" style="width:70px" />
             <h1>欢迎</h1>

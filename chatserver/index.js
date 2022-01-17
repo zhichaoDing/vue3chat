@@ -14,6 +14,9 @@ app.use(koaStatic(__dirname, "../dist"));
 var bodyParser = require("koa-bodyparser");
 app.use(bodyParser());
 
+//获取用户账号信息
+let userContor = require("./userContor");
+
 const http = require("http");
 const server = http.createServer(app.callback());
 //接入socket
@@ -22,6 +25,7 @@ const io = new Server(server, {
   cors: {
     // origin: ["http://localhost:3000","http://192.168.0.106:3333"], //需要放开的跨域地址
     origin: "*", //需要放开的跨域地址
+    // origin: "http://localhost:3000", //需要放开的跨域地址
   },
 });
 
@@ -70,17 +74,45 @@ io.on("connection", (socket) => {
 //静态路由 /index?title
 router.post("/login", async (ctx) => {
   //ctx 包含了request response
-  //获取参数的两种方式
-  ctx.set("Access-Control-Allow-Origin", "*");
-  console.log(ctx.request.body);
+  // ctx.set("Access-Control-Allow-Origin", "*");
+  const { username, password } = ctx.request.body;
   ctx.status = 200;
-  ctx.body = {
-    code: 0,
-    username:ctx.request.body.username
-  };
+  if (userContor.checkUser(username, password)) {
+    //登录成功设置cookie
+    ctx.cookies.set("username", username, {
+      maxAge: 60 * 1000,
+    });
+    ctx.body = {
+      code: 0,
+      username: ctx.request.body.username,
+      msg: "登录成功",
+    };
+  } else {
+    ctx.body = {
+      code: -1,
+      username: ctx.request.body.username,
+      msg: "用户名或密码错误",
+    };
+  }
 });
 
-app.use(cors());
+app.use(
+  cors({
+    credentials: true, //是否允许发送Cookie
+    origin:'http://localhost:3000', //发送cookie 要制定origin 不能为*
+    methods: "PUT,DELETE,POST,GET,OPTIONS",
+    allowedHeaders: "Origin,X-Requested-With,Content-Type,Accept",
+  })
+);
+app.use(async (ctx, next) => {
+  // if(ctx.method == 'OPTIONS'){
+  // ctx.set('Access-Control-Allow-Methods','PUT,DELETE,POST,GET,OPTIONS')
+  //   ctx.set('Access-Control-Max-Age',60*60)
+  // ctx.set('Access-Control-Allow-Credentials',true)
+  // }
+  // ctx.set('Access-Control-Allow-Headers','X-Requested-With, Content-Type, Accept,token')
+  await next();
+});
 app.use(router.routes()).use(router.allowedMethods()); //官方推荐
 
 server.listen(3333, () => {
