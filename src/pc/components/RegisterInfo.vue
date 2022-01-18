@@ -81,7 +81,7 @@ export default defineComponent({
             .then((data) => {
               const { code, msg, username } = data;
               if (code === 0) {
-                router.push("/loggin");
+                router.push("/login");
                 message.success(msg);
               } else {
                 message.error(msg);

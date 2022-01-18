@@ -2,10 +2,10 @@ const Koa = require("koa");
 const app = new Koa();
 const path = require("path");
 
-var cors = require("koa2-cors");
+const cors = require("koa2-cors");
 
-const Router = require("koa-router");
-const router = new Router();
+//书写的路由文件
+const router = require('./route')
 
 const koaStatic = require("koa-static");
 app.use(koaStatic(path.join(__dirname, "../dist")));
@@ -14,8 +14,6 @@ app.use(koaStatic(__dirname, "../dist"));
 var bodyParser = require("koa-bodyparser");
 app.use(bodyParser());
 
-//获取用户账号信息
-let userContor = require("./userContor");
 
 const http = require("http");
 const server = http.createServer(app.callback());
@@ -73,29 +71,29 @@ io.on("connection", (socket) => {
 
 //配置路由
 //静态路由 /index?title
-router.post("/login", async (ctx) => {
-  //ctx 包含了request response
-  // ctx.set("Access-Control-Allow-Origin", "*");
-  const { username, password } = ctx.request.body;
-  ctx.status = 200;
-  if (userContor.checkUser(username, password)) {
-    //登录成功设置cookie
-    ctx.cookies.set("username", username, {
-      maxAge: 60 * 1000,
-    });
-    ctx.body = {
-      code: 0,
-      username: ctx.request.body.username,
-      msg: "登录成功",
-    };
-  } else {
-    ctx.body = {
-      code: -1,
-      username: ctx.request.body.username,
-      msg: "用户名或密码错误",
-    };
-  }
-});
+// router.post("/login", async (ctx) => {
+//   //ctx 包含了request response
+//   // ctx.set("Access-Control-Allow-Origin", "*");
+//   const { username, password } = ctx.request.body;
+//   ctx.status = 200;
+//   if (userContor.checkUser(username, password)) {
+//     //登录成功设置cookie
+//     ctx.cookies.set("username", username, {
+//       maxAge: 60 * 1000,
+//     });
+//     ctx.body = {
+//       code: 0,
+//       username: ctx.request.body.username,
+//       msg: "登录成功",
+//     };
+//   } else {
+//     ctx.body = {
+//       code: -1,
+//       username: ctx.request.body.username,
+//       msg: "用户名或密码错误",
+//     };
+//   }
+// });
 
 //前端配置代理代理后 开发环境无需再配置
 // app.use(
