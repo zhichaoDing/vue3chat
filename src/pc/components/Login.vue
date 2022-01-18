@@ -27,6 +27,7 @@ import { defineComponent, reactive, toRaw } from "vue";
 import { Form, message } from "ant-design-vue";
 import { useRouter, useRoute } from "vue-router";
 import axios from "axios";
+import qs from "qs";
 
 const useForm = Form.useForm;
 export default defineComponent({
@@ -73,7 +74,7 @@ export default defineComponent({
           let data = toRaw(modelRef);
           axios.defaults.withCredentials = true; //设置添加cookie
           axios
-            .post("/api/login", data)
+            .post("/api/login", qs.stringify(data))
             .then((response) => response.data)
             .then((data) => {
               const { code, msg, username } = data;
