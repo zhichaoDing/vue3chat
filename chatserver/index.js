@@ -22,6 +22,7 @@ const server = http.createServer(app.callback());
 //接入socket
 const { Server } = require("socket.io");
 const io = new Server(server, {
+    //前端配置代理代理后 开发环境也需再配置
   cors: {
     // origin: ["http://localhost:3000","http://192.168.0.106:3333"], //需要放开的跨域地址
     origin: "*", //需要放开的跨域地址
@@ -96,14 +97,16 @@ router.post("/login", async (ctx) => {
   }
 });
 
-app.use(
-  cors({
-    credentials: true, //是否允许发送Cookie
-    origin:'http://localhost:3000', //发送cookie 要制定origin 不能为*
-    methods: "PUT,DELETE,POST,GET,OPTIONS",
-    allowedHeaders: "Origin,X-Requested-With,Content-Type,Accept",
-  })
-);
+//前端配置代理代理后 开发环境无需再配置
+// app.use(
+//   cors({    
+//     credentials: true, //是否允许发送Cookie
+//     origin:'http://localhost:3000', //发送cookie 要制定origin 不能为*
+//     methods: "PUT,DELETE,POST,GET,OPTIONS",
+//     allowedHeaders: "Origin,X-Requested-With,Content-Type,Accept",
+//   })
+// );
+
 app.use(async (ctx, next) => {
   // if(ctx.method == 'OPTIONS'){
   // ctx.set('Access-Control-Allow-Methods','PUT,DELETE,POST,GET,OPTIONS')

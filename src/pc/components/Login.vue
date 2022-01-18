@@ -73,7 +73,7 @@ export default defineComponent({
           let data = toRaw(modelRef);
           axios.defaults.withCredentials = true; //设置添加cookie
           axios
-            .post("http://127.0.0.1:3333/login", data)
+            .post("/api/login", data)
             .then((response) => response.data)
             .then((data) => {
               const { code, msg, username } = data;
