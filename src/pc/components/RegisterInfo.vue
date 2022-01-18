@@ -15,12 +15,12 @@
       />
     </a-form-item>
     <a-col :offset="10">
-      <router-link to="/register">
-        <a-button type="link">注 册</a-button>
+      <router-link to="/login">
+        <a-button type="link">登 录</a-button>
       </router-link>
     </a-col>
     <a-form-item>
-      <a-button block @click.prevent="onSubmit" type="primary">登 录</a-button>
+      <a-button block @click.prevent="onSubmit" type="primary">注 册</a-button>
     </a-form-item>
   </a-form>
 </template>
@@ -76,13 +76,12 @@ export default defineComponent({
           let data = toRaw(modelRef);
           axios.defaults.withCredentials = true; //设置添加cookie
           axios
-            .post("/api/login", qs.stringify(data))
+            .post("/api/register", qs.stringify(data))
             .then((response) => response.data)
             .then((data) => {
               const { code, msg, username } = data;
               if (code === 0) {
-                window.localStorage.setItem("username", data.username);
-                router.push("/info");
+                router.push("/loggin");
                 message.success(msg);
               } else {
                 message.error(msg);

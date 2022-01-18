@@ -1,10 +1,14 @@
 import { createRouter, createWebHashHistory } from "vue-router";
-import Info from "../pc/page/Info.vue";
-import Home from "../pc/page/Home.vue";
+import Info from "../pc/page/Info";
+import Home from "../pc/page/Home";
+import Register from "../pc/page/Register";
 
 const routes = [
-  { path: "/", component: Home },
+  { path: "/", redirect: '/login' }, //重定向
+  // { path: "/login", component: Home , alias: '/'  }, //取别名
+  { path: "/login", component: Home },
   { path: "/info", component: Info },
+  { path: "/register", component: Register },
 ];
 
 const routes_pc = createRouter({
