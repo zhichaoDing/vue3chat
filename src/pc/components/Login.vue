@@ -28,8 +28,7 @@
 import { defineComponent, reactive, toRaw } from "vue";
 import { Form, message } from "ant-design-vue";
 import { useRouter, useRoute } from "vue-router";
-import axios from "axios";
-import qs from "qs";
+import { userLogin } from "../servers/user";
 
 const useForm = Form.useForm;
 export default defineComponent({
@@ -61,8 +60,8 @@ export default defineComponent({
           message: "请输入账号密码",
         },
         {
-          pattern: /^[a-zA-Z0-9]{3,5}$/gi,
-          message: "请输入3-5位数字、字母",
+          pattern: /^[a-zA-Z0-9]{6,10}$/gi,
+          message: "请输入6-10位数字、字母",
         },
       ],
     });
@@ -72,22 +71,20 @@ export default defineComponent({
     );
     const onSubmit = () => {
       validate()
-        .then(() => {
-          let data = toRaw(modelRef);
-          axios.defaults.withCredentials = true; //设置添加cookie
-          axios
-            .post("/api/login", qs.stringify(data))
-            .then((response) => response.data)
-            .then((data) => {
-              const { code, msg, username } = data;
-              if (code === 0) {
-                window.localStorage.setItem("username", data.username);
-                router.push("/info");
-                message.success(msg);
-              } else {
-                message.error(msg);
-              }
-            });
+        .then(async () => {
+          let { username, password } = toRaw(modelRef);
+          try {
+            const { code, msg } = await userLogin(username, password);
+            if (code === 0) {
+              window.localStorage.setItem("username", username);
+              router.push("/info");
+              message.success(msg);
+            } else {
+              message.error(msg);
+            }
+          } catch (error) {
+            console.log(error);
+          }
         })
         .catch((err) => {
           console.log("error", err);

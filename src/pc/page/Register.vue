@@ -6,7 +6,7 @@
 
 <script setup>
 import LoginLayout from "../layout/LoginLayout";
-import RegisterInfo from "../components/RegisterInfo.vue";
+import RegisterInfo from "../components/RegisterInfo";
 </script>
 
 <style>
