@@ -29,6 +29,7 @@ import { defineComponent, reactive, toRaw } from "vue";
 import { Form, message } from "ant-design-vue";
 import { useRouter, useRoute } from "vue-router";
 import { userRegister } from "../servers/user";
+import _ from "loadsh";
 
 const useForm = Form.useForm;
 export default defineComponent({
@@ -69,7 +70,7 @@ export default defineComponent({
       modelRef,
       rulesRef
     );
-    const onSubmit = () => {
+    const onSubmit = _.debounce(() => {
       validate()
         .then(async () => {
           try {
@@ -88,7 +89,7 @@ export default defineComponent({
         .catch((err) => {
           console.log("error", err);
         });
-    };
+    },1000);
     return {
       wrapperCol: {
         span: 16,
